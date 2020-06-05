@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import Box from '3box'
 import ThreeBoxComments from '3box-comments-react'
 import 'styled-components/macro'
 import { shortenAddress } from './utils'
@@ -23,7 +22,6 @@ function Vote({ beeVoting, box, boxSpace, currentAddress }) {
       try {
         const votes = await beeVoting.votes()
         const desiredVote = votes.find(({ id }) => id === voteId)
-        console.log('desired', desiredVote)
         setVote(desiredVote)
       } catch (e) {
         console.log('vote err', e)
@@ -35,6 +33,7 @@ function Vote({ beeVoting, box, boxSpace, currentAddress }) {
   }, [beeVoting, voteId, box, currentAddress])
 
   if (loading || !vote) {
+    console.log(loading, vote)
     return 'Loading...'
   }
 
@@ -111,28 +110,21 @@ function ListItem({ children }) {
 
 function CommentBox({ box, ethereum, myAddress, adminEthAddr, threadName }) {
   return (
-    <div
-      css={`
-        display: block;
-        max-width: 600px;
-      `}
-    >
-      <ThreeBoxComments
-        // required
-        spaceName={BOX_SPACE}
-        threadName={threadName}
-        adminEthAddr={adminEthAddr}
-        box={box}
-        currentUserAddr={myAddress}
-        ethereum={ethereum}
-        loginFunction={() => {}}
-        // optional
-        useHovers
-        members={false}
-        showCommentCount={10}
-        threadOpts={{ firstModerator: ADDR }}
-      />
-    </div>
+    <ThreeBoxComments
+      // required
+      spaceName={BOX_SPACE}
+      threadName={threadName}
+      adminEthAddr={adminEthAddr}
+      box={box}
+      currentUserAddr={myAddress}
+      ethereum={ethereum}
+      loginFunction={() => {}}
+      // optional
+      useHovers
+      members={false}
+      showCommentCount={10}
+      threadOpts={{ firstModerator: ADDR }}
+    />
   )
 }
 

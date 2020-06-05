@@ -6,7 +6,6 @@ import { shortenAddress } from './utils'
 export default function Card({ vote }) {
   const history = useHistory()
   const startDate = new Date(Number(vote.startDate) * 1000)
-  console.log(vote)
 
   return (
     <div
@@ -59,7 +58,7 @@ export default function Card({ vote }) {
         <button
           onClick={(e) => {
             e.preventDefault()
-            history.push(`/${vote.id}`)
+            history.push(`${vote.id}`)
           }}
           css={`
             border-radius: 4px;

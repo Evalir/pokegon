@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Voting } from '@aragon/connect-thegraph-voting'
+import { useViewport } from 'use-viewport'
 import 'styled-components/macro'
 import Card from './Card'
 
@@ -10,6 +11,7 @@ const VOTING_APP_ADDR = '0x709e31ba29fb84000f20045590ec664bfc3cdc1d'
 function Votes() {
   const [votes, setVotes] = useState([])
   const [loading, setLoading] = useState(false)
+  const { below } = useViewport()
 
   useEffect(() => {
     async function getVotes() {
@@ -35,13 +37,17 @@ function Votes() {
 
   return (
     <>
-      <h2>Votes for the Beehive</h2>
       <div
         css={`
           display: flex;
           align-items: center;
           justify-content: space-between;
           flex-wrap: wrap;
+          margin-bottom: 64px;
+          ${below('medium') &&
+          `
+            justify-content: center;
+          `}
         `}
       >
         {votes.map((vote, idx) => (
