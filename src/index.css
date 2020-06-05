@@ -137,6 +137,7 @@ table {
 }
 
 body {
+  background: #f8f8fc;
   font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI',
     'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
     'Helvetica Neue', sans-serif;

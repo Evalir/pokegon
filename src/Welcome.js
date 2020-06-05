@@ -46,14 +46,14 @@ export default function Welcome() {
           css={`
             font-size: 28px;
             font-weight: 600;
-            margin-top: 12px;
+            margin-top: 24px;
           `}
         >
           Inspect awesome communities from your Pocket
         </h3>
         <p
           css={`
-            margin-top: 12px;
+            margin-top: 24px;
             font-size: 24px;
           `}
         >
@@ -65,6 +65,7 @@ export default function Welcome() {
           css={`
             margin-top: 32px;
             font-family: monospace;
+            font-size: 16px;
           `}
         >
           Example url: https://pokegon.aragon.org/dao/address
@@ -89,7 +90,7 @@ export default function Welcome() {
             font-weight: 800;
           `}
         >
-          Want to find more Aragon DAOs?{' '}
+          Want to see more Aragon DAOs?{' '}
           <span role="img" aria-label="Thinking">
             🤔
           </span>

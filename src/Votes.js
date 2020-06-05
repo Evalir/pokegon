@@ -3,21 +3,20 @@ import { Voting } from '@aragon/connect-thegraph-voting'
 import { useViewport } from 'use-viewport'
 import 'styled-components/macro'
 import Card from './Card'
+import Spinner, { SpinnerWrapper } from './Spinner'
 
-const ALL_VOTING_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-mainnet'
-const VOTING_APP_ADDR = '0x709e31ba29fb84000f20045590ec664bfc3cdc1d'
-
-function Votes() {
+function Votes({ beeVoting }) {
   const [votes, setVotes] = useState([])
   const [loading, setLoading] = useState(false)
   const { below } = useViewport()
 
   useEffect(() => {
     async function getVotes() {
+      if (!beeVoting) {
+        return
+      }
       try {
         setLoading(true)
-        const beeVoting = new Voting(VOTING_APP_ADDR, ALL_VOTING_SUBGRAPH_URL)
         const votes = await beeVoting.votes()
         setVotes(
           votes.sort((a, b) => Number(b.startDate) - Number(a.startDate))
@@ -29,14 +28,28 @@ function Votes() {
       }
     }
     getVotes()
-  }, [])
+  }, [beeVoting])
 
   if (loading) {
-    return <p> loading ... </p>
+    return (
+      <SpinnerWrapper>
+        <Spinner />
+      </SpinnerWrapper>
+    )
   }
 
   return (
     <>
+      <h1
+        css={`
+          font-size: 32px;
+          font-weight: 800;
+          margin-left: 16px;
+          margin-bottom: 8px;
+        `}
+      >
+        Votes
+      </h1>
       <div
         css={`
           display: flex;
@@ -51,7 +64,10 @@ function Votes() {
         `}
       >
         {votes.map((vote, idx) => (
-          <Card key={vote.id} vote={{ ...vote, number: 52 - idx }} />
+          <Card
+            key={vote.id}
+            vote={{ ...vote, number: votes.length - idx - 1 }}
+          />
         ))}
       </div>
     </>

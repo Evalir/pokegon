@@ -12,6 +12,7 @@ export default function Card({ vote }) {
       css={`
         width: 300px;
         background: white;
+        border: 2px solid rgb(212, 212, 237);
         border-radius: 4px;
         padding: 16px;
         margin: 8px;

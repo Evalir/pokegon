@@ -1,16 +1,28 @@
 import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import 'styled-components/macro'
+import { writeText as copy } from 'clipboard-polyfill'
 import { shortenAddress } from './utils'
 
 export default function TopBar({ daoAddress }) {
   const handleShare = useCallback(
     (e) => {
       e.preventDefault()
-      navigator.clipboard.writeText(
-        `https://pokegon.aragon.org/dao/${daoAddress}`
-      )
-      alert('DAO link copied to clipboard!')
+      var textArea = document.createElement('textarea')
+      textArea.value = `https://pokegon.aragon.org/dao/${daoAddress}`
+
+      // Avoid scrolling to bottom
+      textArea.style.top = '0'
+      textArea.style.left = '0'
+      textArea.style.position = 'absolute'
+      textArea.style.zIndex = '0'
+      document.body.appendChild(textArea)
+      textArea.focus()
+      textArea.select()
+      copy(textArea.value)
+        .then(() => alert('DAO Link copied to clipboard'))
+        .catch((e) => console.log(e))
+      document.body.removeChild(textArea)
     },
     [daoAddress]
   )
@@ -19,7 +31,7 @@ export default function TopBar({ daoAddress }) {
     <div
       css={`
         position: absolute;
-        z-index: 1;
+        z-index: 2;
         left: 0;
         top: 0;
         width: 100vw;

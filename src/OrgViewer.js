@@ -6,24 +6,22 @@ import { Voting } from '@aragon/connect-thegraph-voting'
 import 'styled-components/macro'
 import TopBar from './TopBar'
 import NavTabs from './NavTabs'
+import Holders from './Holders'
 import Vote from './Vote'
 import Votes from './Votes'
 import OrgWelcome from './OrgWelcome'
-
-const ADDR = '0x702B0507CD44762bd0740Fa76Ed67bC9Fc7495f7'
-const BOX_SPACE = `test-beehive-1`
+import Spinner, { SpinnerWrapper } from './Spinner'
 
 const DAO_SUBGRAPH_URL =
   'https://api.thegraph.com/subgraphs/name/aragon/aragon-mainnet'
 const ALL_VOTING_SUBGRAPH_URL =
   'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-mainnet'
-const VOTING_APP_ADDR = '0x709e31ba29fb84000f20045590ec664bfc3cdc1d'
 
 export default function OrgViewer() {
-  const [beeVoting, setBeeVoting] = useState(null)
   const [box, setBox] = useState(null)
   const [boxSpace, setBoxSpace] = useState(null)
   const [tokenManagerAddress, setTokenManagerAddress] = useState(null)
+  const [beeVoting, setBeeVoting] = useState(null)
   const [currentAddress, setCurrentAddress] = useState(null)
   const [loading, setLoading] = useState(false)
   const { params, path } = useRouteMatch()
@@ -31,18 +29,29 @@ export default function OrgViewer() {
 
   useEffect(() => {
     async function initOrgData() {
-      const org = await connect(daoId, [
-        'thegraph',
-        { daoSubgraphUrl: DAO_SUBGRAPH_URL },
-      ])
-      console.log(org)
-      const apps = await org.apps()
-      console.log(apps)
-      const tokenManager = apps.find(
-        ({ appName }) => appName && appName.startsWith('token-manager')
-      )
-      console.log(tokenManager)
-      setTokenManagerAddress(tokenManager.address)
+      try {
+        setLoading(true)
+        const org = await connect(daoId, [
+          'thegraph',
+          { daoSubgraphUrl: DAO_SUBGRAPH_URL },
+        ])
+        const apps = await org.apps()
+        console.log(apps)
+        const tokenManager = apps.find(
+          ({ appName }) => appName && appName.startsWith('token-manager')
+        )
+        const votingApp = apps.find(
+          ({ appName }) => appName && appName.toLowerCase().startsWith('voting')
+        )
+        console.log(tokenManager, votingApp)
+        setTokenManagerAddress(tokenManager.address)
+        const voting = new Voting(votingApp.address, ALL_VOTING_SUBGRAPH_URL)
+        setBeeVoting(voting)
+      } catch (e) {
+        console.log('connect error:', e)
+      } finally {
+        setLoading(false)
+      }
     }
     async function init3Box() {
       try {
@@ -54,10 +63,8 @@ export default function OrgViewer() {
         // This feels a bit slow ,but we gotta wait for the box to sync to avoid any errors when
         // reading data (even though it's fine by 3box docs)
         await box.syncDone
+        const space = await box.openSpace(`test-${daoId}-1`)
         setBox(box)
-        const space = await box.openSpace(BOX_SPACE)
-        const beeVoting = new Voting(VOTING_APP_ADDR, ALL_VOTING_SUBGRAPH_URL)
-        setBeeVoting(beeVoting)
       } catch (e) {
         console.log('rip', e)
       } finally {
@@ -72,34 +79,44 @@ export default function OrgViewer() {
     <>
       <TopBar daoAddress={daoId} />
       <NavTabs daoAddress={daoId} />
-      <div
-        css={`
-          width: 100%;
-          margin-top: 86px;
-          font-family: 'manrope';
-          overflow-x: hidden;
-        `}
-      >
-        <Switch>
-          <Route path={`${path}/votes/:voteId`}>
-            <Vote
-              beeVoting={beeVoting}
-              box={box}
-              boxSpace={boxSpace}
-              currentAddress={currentAddress}
-            />
-          </Route>
-          <Route path={`${path}/votes/`}>
-            <Votes beeVoting={beeVoting} />
-          </Route>
-          <Route path={`${path}/`}>
-            <OrgWelcome
-              daoAddress={daoId}
-              tokenManagerAddress={tokenManagerAddress}
-            />
-          </Route>
-        </Switch>
-      </div>
+      {loading ? (
+        <SpinnerWrapper>
+          <Spinner />
+        </SpinnerWrapper>
+      ) : (
+        <div
+          css={`
+            width: 100%;
+            margin-top: 86px;
+            font-family: 'manrope';
+            overflow-x: hidden;
+          `}
+        >
+          <Switch>
+            <Route path={`${path}/votes/:voteId`}>
+              <Vote
+                beeVoting={beeVoting}
+                box={box}
+                boxSpace={boxSpace}
+                currentAddress={currentAddress}
+                daoAddress={daoId}
+              />
+            </Route>
+            <Route path={`${path}/votes/`}>
+              <Votes beeVoting={beeVoting} />
+            </Route>
+            <Route path={`${path}/holders/`}>
+              <Holders box={box} tokenManagerAddress={tokenManagerAddress} />
+            </Route>
+            <Route path={`${path}/`}>
+              <OrgWelcome
+                daoAddress={daoId}
+                tokenManagerAddress={tokenManagerAddress}
+              />
+            </Route>
+          </Switch>
+        </div>
+      )}
     </>
   )
 }

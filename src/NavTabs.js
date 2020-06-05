@@ -25,7 +25,7 @@ export default function NavTabs({ daoAddress }) {
       css={`
         background: white;
         position: fixed;
-        z-index: 1;
+        z-index: 2;
         left: 0;
         bottom: 0;
         width: 100vw;

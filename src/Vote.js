@@ -2,26 +2,30 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import ThreeBoxComments from '3box-comments-react'
 import 'styled-components/macro'
+import Spinner, { SpinnerWrapper } from './Spinner'
 import { shortenAddress } from './utils'
 
 const ADDR = '0x702B0507CD44762bd0740Fa76Ed67bC9Fc7495f7'
-const BOX_SPACE = `test-beehive-1`
 
-function Vote({ beeVoting, box, boxSpace, currentAddress }) {
+function Vote({ beeVoting, box, boxSpace, currentAddress, daoAddress }) {
   const [vote, setVote] = useState(null)
   const [loading, setLoading] = useState(false)
   const { voteId } = useParams()
-  const threadName = `${voteId}-beehive`
+  const threadName = `${voteId}-pokegon-test`
 
   useEffect(() => {
     async function getVote() {
-      if (!beeVoting || !currentAddress || !box) {
-        return
-      }
       setLoading(true)
       try {
         const votes = await beeVoting.votes()
-        const desiredVote = votes.find(({ id }) => id === voteId)
+        const orderedVotes = votes.sort(
+          (a, b) => Number(b.startDate) - Number(a.startDate)
+        )
+        const augmentedVotes = orderedVotes.map((vote, idx) => ({
+          ...vote,
+          number: votes.length - idx - 1,
+        }))
+        const desiredVote = augmentedVotes.find(({ id }) => id === voteId)
         setVote(desiredVote)
       } catch (e) {
         console.log('vote err', e)
@@ -33,8 +37,11 @@ function Vote({ beeVoting, box, boxSpace, currentAddress }) {
   }, [beeVoting, voteId, box, currentAddress])
 
   if (loading || !vote) {
-    console.log(loading, vote)
-    return 'Loading...'
+    return (
+      <SpinnerWrapper>
+        <SpinnerWrapper />
+      </SpinnerWrapper>
+    )
   }
 
   const startDate = new Date(Number(vote.startDate) * 1000)
@@ -44,13 +51,18 @@ function Vote({ beeVoting, box, boxSpace, currentAddress }) {
       css={`
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
         flex-wrap: wrap;
         min-height: 100vh;
       `}
     >
-      <h2>Vote detail</h2>
+      <h2
+        css={`
+          margin-left: 8px;
+          font-weight: 800;
+        `}
+      >
+        Vote {vote.number} detail
+      </h2>
       <div
         css={`
           width: 100%;
@@ -67,6 +79,7 @@ function Vote({ beeVoting, box, boxSpace, currentAddress }) {
         >
           <ListItem>Open: {String(!vote.executed)}</ListItem>
           <ListItem>Snapshot block: {vote.snapshotBlock}</ListItem>
+          {vote.metadata && <ListItem>Reason: {vote.metadata}</ListItem>}
           <ListItem>
             Creator:{' '}
             <a
@@ -82,14 +95,20 @@ function Vote({ beeVoting, box, boxSpace, currentAddress }) {
           </ListItem>
         </ul>
       </div>
-      {box && currentAddress && (
+      {box && currentAddress ? (
         <CommentBox
           adminEthAddr={ADDR}
           box={box}
           ethereum={window.ethereum}
           myAddress={currentAddress}
           threadName={threadName}
+          spaceName={`test-${daoAddress}-1`}
         />
+      ) : (
+        <h2>
+          It seems 3Box couldn't initialize properly. Please, go back to the
+          start and reload the page.
+        </h2>
       )}
     </div>
   )
@@ -108,17 +127,24 @@ function ListItem({ children }) {
   )
 }
 
-function CommentBox({ box, ethereum, myAddress, adminEthAddr, threadName }) {
+function CommentBox({
+  box,
+  ethereum,
+  myAddress,
+  adminEthAddr,
+  threadName,
+  spaceName,
+}) {
+  console.log(myAddress)
   return (
     <ThreeBoxComments
       // required
-      spaceName={BOX_SPACE}
+      spaceName={spaceName}
       threadName={threadName}
       adminEthAddr={adminEthAddr}
       box={box}
       currentUserAddr={myAddress}
       ethereum={ethereum}
-      loginFunction={() => {}}
       // optional
       useHovers
       members={false}
