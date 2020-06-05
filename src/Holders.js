@@ -32,7 +32,11 @@ function Holders({ tokenManagerAddress }) {
         const augmentedHolders = await Promise.all(
           tokenHolders.map(async (holder) => {
             const profile = await Box.getProfile(holder.address)
-            return { ...holder, name: profile.name || 'Unknown' }
+            return {
+              ...holder,
+              name: profile.name || 'Unknown',
+              symbol: tokenDetails.symbol,
+            }
           })
         )
         console.log(augmentedHolders)

@@ -6,6 +6,7 @@ import Spinner, { SpinnerWrapper } from './Spinner'
 import { shortenAddress } from './utils'
 
 const ADDR = '0x702B0507CD44762bd0740Fa76Ed67bC9Fc7495f7'
+const SPACE_NAME = 'test-pokegon-comments-1'
 
 function Vote({ beeVoting, box, boxSpace, currentAddress, daoAddress }) {
   const [vote, setVote] = useState(null)
@@ -102,7 +103,7 @@ function Vote({ beeVoting, box, boxSpace, currentAddress, daoAddress }) {
           ethereum={window.ethereum}
           myAddress={currentAddress}
           threadName={threadName}
-          spaceName={`test-${daoAddress}-1`}
+          spaceName={SPACE_NAME}
         />
       ) : (
         <h2>

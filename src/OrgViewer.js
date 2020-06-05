@@ -16,6 +16,7 @@ const DAO_SUBGRAPH_URL =
   'https://api.thegraph.com/subgraphs/name/aragon/aragon-mainnet'
 const ALL_VOTING_SUBGRAPH_URL =
   'https://api.thegraph.com/subgraphs/name/aragon/aragon-voting-mainnet'
+const SPACE_NAME = 'test-pokegon-comments-1'
 
 export default function OrgViewer() {
   const [box, setBox] = useState(null)
@@ -63,7 +64,7 @@ export default function OrgViewer() {
         // This feels a bit slow ,but we gotta wait for the box to sync to avoid any errors when
         // reading data (even though it's fine by 3box docs)
         await box.syncDone
-        const space = await box.openSpace(`test-${daoId}-1`)
+        const space = await box.openSpace(SPACE_NAME)
         setBox(box)
       } catch (e) {
         console.log('rip', e)

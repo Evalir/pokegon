@@ -32,6 +32,8 @@ export default function HolderCard({ holder }) {
         <ListItem>
           <Blockies seed={holder.address} />
           <a
+            target="_blank"
+            rel="noreferrer noopener"
             href={`https://etherscan.io/address/${holder.address}`}
             css={`
               margin-left: 8px;
@@ -41,7 +43,8 @@ export default function HolderCard({ holder }) {
           </a>
         </ListItem>
         <ListItem>
-          Balance: {new BN(holder.balance).div(NUM_BASE).toString()}
+          Balance: {new BN(holder.balance).div(NUM_BASE).toString()}{' '}
+          {holder.symbol}
         </ListItem>
       </ul>
     </div>
