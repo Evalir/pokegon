@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import 'styled-components/macro'
 import { writeText as copy } from 'clipboard-polyfill'
-import { shortenAddress } from './utils'
+import { shortenAddress } from '../lib/utils'
 
 export default function TopBar({ daoAddress }) {
   const handleShare = useCallback(

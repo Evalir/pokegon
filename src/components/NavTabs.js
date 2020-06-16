@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, useHistory, useRouteMatch } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Inbox, Home, User } from 'react-feather'
 import 'styled-components/macro'
 import styled from 'styled-components'
@@ -17,9 +17,6 @@ const StyledLink = styled(Link)`
 `
 
 export default function NavTabs({ daoAddress }) {
-  const history = useHistory()
-  const match = useRouteMatch()
-
   return (
     <div
       css={`

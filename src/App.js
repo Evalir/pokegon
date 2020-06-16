@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import OrgViewer from './OrgViewer'
-import Welcome from './Welcome'
+import OrgViewer from './views/OrgViewer'
+import Welcome from './views/Welcome'
 
 function App() {
   return (

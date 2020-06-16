@@ -1,7 +1,7 @@
 import React from 'react'
 import { useHistory } from 'react-router'
 import 'styled-components/macro'
-import { shortenAddress } from './utils'
+import { shortenAddress } from '../lib/utils'
 
 export default function Card({ vote }) {
   const history = useHistory()

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import ThreeBoxComments from '3box-comments-react'
 import 'styled-components/macro'
-import Spinner, { SpinnerWrapper } from './Spinner'
-import { shortenAddress } from './utils'
+import Spinner, { SpinnerWrapper } from '../components/Spinner'
+import { shortenAddress } from '../lib/utils'
 
 const ADDR = '0x702B0507CD44762bd0740Fa76Ed67bC9Fc7495f7'
 const SPACE_NAME = 'test-pokegon-comments-1'
@@ -40,7 +40,7 @@ function Vote({ beeVoting, box, boxSpace, currentAddress, daoAddress }) {
   if (loading || !vote) {
     return (
       <SpinnerWrapper>
-        <SpinnerWrapper />
+        <Spinner />
       </SpinnerWrapper>
     )
   }

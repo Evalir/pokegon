@@ -6,8 +6,6 @@ import HolderCard from './HolderCard'
 import Spinner, { SpinnerWrapper } from './Spinner'
 import Box from '3box'
 
-const DAO_SUBGRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/aragon/aragon-mainnet'
 const TOKEN_MANAGER_SUBGRAPH =
   'https://api.thegraph.com/subgraphs/name/ajsantander/aragon-token-mainnet'
 

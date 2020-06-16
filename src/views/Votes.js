@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Voting } from '@aragon/connect-thegraph-voting'
 import { useViewport } from 'use-viewport'
 import 'styled-components/macro'
-import Card from './Card'
-import Spinner, { SpinnerWrapper } from './Spinner'
+import Card from '../components/Card'
+import Spinner, { SpinnerWrapper } from '../components/Spinner'
 
 function Votes({ beeVoting }) {
   const [votes, setVotes] = useState([])

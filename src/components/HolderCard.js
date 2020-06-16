@@ -1,14 +1,12 @@
 import React from 'react'
-import { useHistory } from 'react-router'
 import BN from 'bn.js'
 import 'styled-components/macro'
-import { shortenAddress } from './utils'
+import { shortenAddress } from '../lib/utils'
 import Blockies from 'react-blockies'
 
 const NUM_BASE = new BN('1000000000000000000')
 
 export default function HolderCard({ holder }) {
-  const history = useHistory()
 
   return (
     <div
