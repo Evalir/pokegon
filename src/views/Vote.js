@@ -3,10 +3,8 @@ import { useParams } from 'react-router-dom'
 import ThreeBoxComments from '3box-comments-react'
 import 'styled-components/macro'
 import Spinner, { SpinnerWrapper } from '../components/Spinner'
+import environment from '../lib/environment'
 import { shortenAddress } from '../lib/utils'
-
-const ADDR = '0x702B0507CD44762bd0740Fa76Ed67bC9Fc7495f7'
-const SPACE_NAME = 'test-pokegon-comments-1'
 
 function Vote({ beeVoting, box, boxSpace, currentAddress, daoAddress }) {
   const [vote, setVote] = useState(null)
@@ -98,12 +96,12 @@ function Vote({ beeVoting, box, boxSpace, currentAddress, daoAddress }) {
       </div>
       {box && currentAddress ? (
         <CommentBox
-          adminEthAddr={ADDR}
+          adminEthAddr={environment('ADMIN_ADDR_3BOX')}
           box={box}
           ethereum={window.ethereum}
           myAddress={currentAddress}
           threadName={threadName}
-          spaceName={SPACE_NAME}
+          spaceName={environment('SPACE_NAME_3BOX')}
         />
       ) : (
         <h2>
@@ -136,7 +134,6 @@ function CommentBox({
   threadName,
   spaceName,
 }) {
-  console.log(myAddress)
   return (
     <ThreeBoxComments
       // required
@@ -150,7 +147,7 @@ function CommentBox({
       useHovers
       members={false}
       showCommentCount={10}
-      threadOpts={{ firstModerator: ADDR }}
+      threadOpts={{ firstModerator: environment('ADMIN_ADDR_3BOX') }}
     />
   )
 }

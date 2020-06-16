@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import 'styled-components/macro'
 import BN from 'bn.js'
 import { TokenManager } from '@aragon/connect-thegraph-token-manager'
-
-const TOKEN_MANAGER_SUBGRAPH =
-  'https://api.thegraph.com/subgraphs/name/ajsantander/aragon-token-mainnet'
+import 'styled-components/macro'
+import environment from '../lib/environment'
 
 export default function OrgWelcome({ daoAddress, tokenManagerAddress }) {
   const [tokenDetails, setTokenDetails] = useState(null)
@@ -14,13 +12,17 @@ export default function OrgWelcome({ daoAddress, tokenManagerAddress }) {
       if (!tokenManagerAddress) {
         return
       }
-      const tokenManager = new TokenManager(
-        tokenManagerAddress,
-        TOKEN_MANAGER_SUBGRAPH
-      )
-      const tokenDetails = await tokenManager.token()
-      const tokenHolders = await tokenDetails.holders()
-      setTokenDetails({ ...tokenDetails, holders: tokenHolders.length })
+      try {
+        const tokenManager = new TokenManager(
+          tokenManagerAddress,
+          environment('TOKENS_SUBGRAPH_URL')
+        )
+        const tokenDetails = await tokenManager.token()
+        const tokenHolders = await tokenDetails.holders()
+        setTokenDetails({ ...tokenDetails, holders: tokenHolders.length })
+      } catch (err) {
+        console.err(err)
+      }
     }
     getTokenDetails()
   }, [tokenManagerAddress])

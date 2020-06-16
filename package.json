@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "3box": "^1.19.0",
-    "3box-comments-react": "^3.0.3",
+    "3box": "^1.20.0",
+    "3box-comments-react": "^3.0.4",
     "@aragon/connect": "^0.1.0",
     "@aragon/connect-core": "^0.1.0",
     "@aragon/connect-thegraph": "^0.1.0",
@@ -15,6 +15,7 @@
     "@testing-library/user-event": "^7.1.2",
     "bn.js": "^5.1.2",
     "clipboard-polyfill": "^2.8.6",
+    "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-blockies": "^1.4.1",
     "react-dom": "^16.13.1",

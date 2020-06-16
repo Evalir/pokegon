@@ -5,18 +5,16 @@ import Welcome from './views/Welcome'
 
 function App() {
   return (
-    <>
-      <Router>
-        <Switch>
-          <Route path="/dao/:daoId">
-            <OrgViewer />
-          </Route>
-          <Route path="/">
-            <Welcome />
-          </Route>
-        </Switch>
-      </Router>
-    </>
+    <Router>
+      <Switch>
+        <Route path="/dao/:daoId">
+          <OrgViewer />
+        </Route>
+        <Route path="/">
+          <Welcome />
+        </Route>
+      </Switch>
+    </Router>
   )
 }
 

@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { TokenManager } from '@aragon/connect-thegraph-token-manager'
+import Box from '3box'
 import { useViewport } from 'use-viewport'
+import { TokenManager } from '@aragon/connect-thegraph-token-manager'
 import 'styled-components/macro'
 import HolderCard from './HolderCard'
+import environment from '../lib/environment'
 import Spinner, { SpinnerWrapper } from './Spinner'
-import Box from '3box'
-
-const TOKEN_MANAGER_SUBGRAPH =
-  'https://api.thegraph.com/subgraphs/name/ajsantander/aragon-token-mainnet'
 
 function Holders({ tokenManagerAddress }) {
   const [holders, setHolders] = useState([])
@@ -23,7 +21,7 @@ function Holders({ tokenManagerAddress }) {
         setLoading(true)
         const tokenManager = new TokenManager(
           tokenManagerAddress,
-          TOKEN_MANAGER_SUBGRAPH
+          environment('TOKENS_SUBGRAPH_URL')
         )
         const tokenDetails = await tokenManager.token()
         const tokenHolders = await tokenDetails.holders()
@@ -37,7 +35,6 @@ function Holders({ tokenManagerAddress }) {
             }
           })
         )
-        console.log(augmentedHolders)
         setHolders(augmentedHolders)
       } catch (e) {
         console.log(e)
